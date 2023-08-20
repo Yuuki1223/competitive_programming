@@ -16,6 +16,8 @@ constexpr const ll Llmax = LLONG_MAX;
 constexpr const char SPACE = ' ';
 constexpr const char TAB = '\t';
 constexpr const char NL = '\n';
+auto fout = ofstream(R"(C:\Users\Yuuki\source\repos\AtCoder\out.txt)");
+auto fin = ifstream(R"(C:\Users\Yuuki\source\repos\AtCoder\in.txt)");
 inline constexpr ll divup(ll x, ll y) { return (x + y - 1) / y; };
 inline constexpr bool bit(ull x, ll p) { return ((x >> p) & 1) == 1; };
 inline constexpr ll ctoi(char c) { return ll(c) - '0'; };
