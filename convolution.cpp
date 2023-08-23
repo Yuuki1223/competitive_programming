@@ -2,6 +2,8 @@
 #include "templates/top.cpp"
 #include "templates/static_modll.cpp"
 
+using modll = modll_base<998244353>;
+
 vector<modll> conv(vector<modll> a, vector<modll> b) {
 	static_assert(modll::MOD == 998244353);		//998244353 == 2^23 * 119 + 1
 	if (a.empty() || b.empty())return {};
