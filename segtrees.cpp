@@ -51,7 +51,7 @@ namespace segtrees {
 			return data[pos + size2p - 1];
 		}
 
-		ll lowerbound(ll x, function<bool(segT)> g) {
+		ll lowerbound(ll x, function<bool(segT)> g) {	//requests g‚Í"”ÍˆÍ‚ªL‚ª‚é => true->false‚É‚Í‚È‚ç‚È‚¢", g(tr[x, p]) ‚ª true ‚ğ•Ô‚·Å¬‚Ìp‚Ì’l‚ğ•Ô‚·A‚È‚¯‚ê‚Îsize
 			bse = g;
 			ll res = lowerbound_sub(x, dunit, 0, 0, size2p).first;
 			return res != -1 ? res : size;

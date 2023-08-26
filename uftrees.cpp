@@ -104,7 +104,7 @@ namespace uftrees {
 			return true;
 		};
 
-		ll diff(ll x, ll y) {
+		ll diff(ll x, ll y) {	//x‚©‚çŒ©‚½‚Æ‚«‚Ìy‚Ü‚Å‚Ì‚’á·
 			root(x);
 			root(y);
 			return pot[y] - pot[x];

@@ -53,6 +53,7 @@ vector<ll> topological_sort(vector<vector<ll>> e) {
 			if (ine[e[v][i]] == 0) ninq.push(e[v][i]);
 		}
 	}
+	sortedid.resize(e.size(), -1);
 	return sortedid;
 }
 

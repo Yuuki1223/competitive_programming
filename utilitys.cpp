@@ -164,7 +164,7 @@ namespace kyopro_utility {
 	}
 
 	template<bool strict, typename T>
-	vector<ll> longest_increase_sequence_dp(const vector<T>& ar) {
+	vector<ll> longest_increase_sequence_dp(const vector<T>& ar) {	//dp[i] == ar[i]‚ªdp‚Å‘}“ü‚³‚ê‚éˆÊ’u
 		vector<ll> dp(ar.size());
 		vector<T> dp_lis;
 		REP(i, ar.size()) {

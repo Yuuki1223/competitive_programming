@@ -6,7 +6,7 @@ class rolling_hash {
 public:
 	constexpr static ll n = 2;
 
-	rolling_hash(string _s) :s(_s) {
+	rolling_hash(string _s) :s(_s) {	//requests s.element in ['a', 'z']
 		REP(i, n) {
 			if (bs[i].empty())bs[i].push_back(1);
 			if (brs[i].empty())brs[i].push_back(1);
@@ -29,7 +29,7 @@ public:
 		return h;
 	}
 
-	const string get(void) { return s; }
+	string get(void) { return s; }
 
 	static void random_init(void) {
 		REP(i, n) {

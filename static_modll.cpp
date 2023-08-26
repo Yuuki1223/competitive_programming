@@ -1,6 +1,7 @@
 #pragma once
 #include "templates/top.cpp"
 
+//requests _MOD is prime
 template<ll _MOD>
 class modll_base {
 public:
