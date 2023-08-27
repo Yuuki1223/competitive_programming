@@ -23,8 +23,8 @@ public:
 		ll w = rp - l;
 		if (w <= 0)return T();
 		else {
-			ll k = countr_zero(bit_floor<ull>(w));
-			return bop(dat[k][l], dat[k][rp - (1ull << k)]);
+			ll b = countr_zero(bit_floor<ull>(w));
+			return bop(dat[b][l], dat[b][rp - (1ull << b)]);
 		}
 	}
 
