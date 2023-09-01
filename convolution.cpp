@@ -10,47 +10,50 @@ vector<modll> conv(vector<modll> a, vector<modll> b) {
 	modll c(15311432);	// == 3^119, 3ÇÕ998244353ÇÃå¥énç™
 	assert(a.size() + b.size() - 1 <= 1ll << 23);
 
-	ll n = 1, k = 0;
-	while (!(ll(a.size() + b.size()) - 1 <= n)) { n *= 2;	k++; }
+	ll k = (ll)countr_zero(bit_ceil(a.size() + b.size() - 1ull)), n = 1ll << k, as = a.size(), bs = b.size();
 	REP(i, 23 - k) c = c.pow(2);
 
-	const static function<void(vector<modll>&, modll)> dft =
-		[](vector<modll>& ar, modll t) {
-		if (ar.size() == 1)return;
-		ll m = ar.size() / 2;
-		vector<modll> a(m), b(m);
-		REP(i, m) {
-			a[i] = ar[i * 2];
-			b[i] = ar[i * 2 + 1];
+	auto dft_fast = [](vector<modll>& ar, modll w)->void {
+		const ll k = countr_zero(ar.size()), n = ar.size();
+
+		for (ll d = 1ll << (k - 1); 1 <= d; d >>= 1) {
+			for (ll b = 0; b < n; b += d * 2) {
+				modll wt = 1;
+				REP(dd, d) {
+					modll s = ar[b + dd], t = ar[d + b + dd];
+					ar[b + dd] = s + t;
+					ar[d + b + dd] = wt * (s - t);
+					wt *= w;
+				}
+			}
+			w *= w;
 		}
-		dft(a, t.pow(2));
-		dft(b, t.pow(2));
-		modll tt = 1;
-		REP(i, m * 2) {
-			ar[i] = a[i < m ? i : i - m] + tt * b[i < m ? i : i - m];
-			tt *= t;
+
+		REP(i, n) {
+			ll j = 0;
+			REP(t, k)j |= ll(bit(i, t)) << (k - 1 - t);
+			if (i < j)swap(ar[i], ar[j]);
 		}
+
 		return;
 	};
 
-	ll as = a.size(), bs = b.size();
+	a.resize(n);
+	b.resize(n);
 
-	while ((ll)a.size() < n)a.push_back(0);
-	while ((ll)b.size() < n)b.push_back(0);
-
-	dft(a, c);
-	dft(b, c);
+	dft_fast(a, c);
+	dft_fast(b, c);
 
 	vector<modll> ans(n);
 	REP(i, n)ans[i] = a[i] * b[i];
 	c = c.inv();
-	dft(ans, c);
+	dft_fast(ans, c);
 
 	modll nn(modll(n).inv());
 
 	REP(i, n)ans[i] *= nn;
 
-	while (as + bs - 1 < (ll)ans.size())ans.pop_back();
+	ans.resize(as + bs - 1);
 
 	return ans;
 }
