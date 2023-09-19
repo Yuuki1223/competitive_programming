@@ -130,6 +130,8 @@ namespace kyopro_utility {
 			return e;
 		}
 
+		static mt19937_64& getengine(void) { return rnd; }
+
 	private:
 		static mt19937_64 rnd;
 	};

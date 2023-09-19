@@ -25,6 +25,26 @@ public:
 		return r;
 	};
 
+	fps differential(void)const {
+		if ((*this).empty())return fps();
+		fps r((*this).size() - 1);
+		REP(i, (*this).size() - 1)r[i] = (*this)[i + 1] * modll(i + 1);
+		return r;
+	};
+	
+	fps integral(void) {
+		fps r((*this).size() + 1);
+		REP(i, (*this).size())r[i + 1] = (*this)[i] * modll(i + 1).inv();
+		return r;
+	};
+
+	fps log(void)const {
+		assert(!(*this).empty() && (*this)[0] == modll(1));
+		fps r = ((*this).differential() / (*this)).integral();
+		r.resize((*this).size());
+		return r;
+	};
+
 	fps shrink(void) {
 		if (maxsize < ll((*this).size()))(*this).resize(maxsize);
 		return (*this);
@@ -67,15 +87,3 @@ private:
 
 };
 ll fps::maxsize = 1 << 22;
-
-int main() {
-	
-	ll n;
-	cin >> n;
-	fps a(n);
-	REP(i, n)cin >> a[i];
-	fps b = a.inv();
-	REP(i, n)cout << b[i] << SPACE;
-
-	return 0;
-}

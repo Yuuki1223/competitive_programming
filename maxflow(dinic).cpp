@@ -36,7 +36,7 @@ private:
 
 	ll dfs(ll v, ll t, ll f) {
 		if (v == t)return f;
-		for (ll& i = iter[v]; i < g[v].size(); i++) {
+		for (ll& i = iter[v]; i < (ll)g[v].size(); i++) {
 			edge& ed = g[v][i];
 			if (0 < ed.cap && level[v] < level[ed.to]) {
 				ll d = dfs(ed.to, t, min(f, ed.cap));
@@ -61,7 +61,7 @@ public:
 	};
 
 	dinic_maxflow(const ll size, const vector<vector<pair<ll, ll>>>& ag) :vsize(size), e(size), level(size), iter(size) {
-		if (size < ag.size())dinic_err("fail to create new dinic class(too small vertex size).");
+		if (size < (ll)ag.size())dinic_err("fail to create new dinic class(too small vertex size).");
 		REP(i, ag.size())REP(j, ag[i].size()) {
 			e[i].push_back({ ag[i][j].first, ag[i][j].second, (ll)e[ag[i][j].first].size(), true });
 			e[ag[i][j].first].push_back({ i, 0, (ll)e[i].size() - 1, false });
