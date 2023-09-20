@@ -149,26 +149,52 @@ int main() {
 
 	//Mo's Algorithm
 	{
-		using T = ll;
-		struct _range {
-			void in(T x) {
-			}
-			void out(T x) {
+		using T_in = ll;
+		using t_out = ll;
+		struct vector_and_range : public vector<T_in> {
+
+			vector_and_range(ll size) : vector<T_in>(size), l(-1), rp(-1) {
+
 			}
 
-			T ans(void) {
-				return 0;
+			void construct(ll cl, ll crp) {
+				l = cl;
+				rp = crp;
+				for (ll i = l; i < rp; i++) {
+
+				}
 			}
+
+			void popleft(void) {
+
+				l++;
+			}
+
+			void pushleft(void) {
+				l--;
+
+			}
+
+			void pushright(void) {
+
+				rp++;
+			}
+
+			t_out ans(void) {
+				return t_out();
+			}
+
+			ll l, rp;
 		};
 
 		ll n, q;
 		cin >> n >> q;
 		vector<ll> l(q), r(q);
-		vector<T> a(n);
+		vector_and_range a(n);
 		REP(i, n)cin >> a[i];
 		REP(i, q)cin >> l[i] >> r[i];
 
-		vector<ll> ans(q);
+		vector<t_out> ans(q);
 
 		ll k = 0;
 		while (k * k < q)k++;
@@ -185,31 +211,22 @@ int main() {
 		}
 
 		REP(i, k) {
-			ll l = -1, r = -1;
-			_range range;
 			REP(j, qsp[i].size()) {
 				if (!j) {
-					l = get<0>(qsp[i][j]);
-					r = get<1>(qsp[i][j]);
-					for (ll p = l; p < r; p++) {
-						range.in(a[p]);
-					}
+					a.construct(get<0>(qsp[i][j]), get<1>(qsp[i][j]));
 				}
 				else {
-					while (l < get<0>(qsp[i][j])) {
-						range.out(a[l]);
-						l++;
+					while (a.l < get<0>(qsp[i][j])) {
+						a.popleft();
 					}
-					while (get<0>(qsp[i][j]) < l) {
-						l--;
-						range.in(a[l]);
+					while (get<0>(qsp[i][j]) < a.l) {
+						a.pushleft();
 					}
-					while (r < get<1>(qsp[i][j])) {
-						range.in(a[r]);
-						r++;
+					while (a.rp < get<1>(qsp[i][j])) {
+						a.pushright();
 					}
 				}
-				ans[get<2>(qsp[i][j])] = range.ans();
+				ans[get<2>(qsp[i][j])] = a.ans();
 			}
 		}
 	}
