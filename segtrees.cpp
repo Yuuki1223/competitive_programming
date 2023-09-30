@@ -169,6 +169,7 @@ namespace segtrees {
 			while (size2p < size)size2p *= 2, hig++;
 			data.resize(size2p * 2 - 1, dunit);
 			lazy.resize(size2p * 2 - 1, funit);
+			for (ll i = size2p - 2; 0 <= i; i--)data[i] = bop(data[i * 2 + 1], data[i * 2 + 2]);
 		}
 
 		segtree_lazy(vector<segT> startarray, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT)> _fbact, function<segF(segF, segF)> _fop)
