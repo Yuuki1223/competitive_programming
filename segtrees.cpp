@@ -164,25 +164,20 @@ namespace segtrees {
 	template<typename segT, typename segF>
 	class segtree_lazy {
 	public:
-		segtree_lazy(ll _size, segT startdata, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT, ll)> _fbact, function<segF(segF, segF)> _fop)
+		segtree_lazy(ll _size, segT startdata, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT)> _fbact, function<segF(segF, segF)> _fop)
 			:size(_size), dunit(_dunit), bop(_bop), funit(_funit), fbact(_fbact), fop(_fop), size2p(1), hig(0) {
 			while (size2p < size)size2p *= 2, hig++;
-			siz.resize(size2p * 2 - 1, 1);
 			data.resize(size2p * 2 - 1, dunit);
 			lazy.resize(size2p * 2 - 1, funit);
-			for (ll i = size2p - 2; 0 <= i; i--)
-				data[i] = bop(data[i * 2 + 1], data[i * 2 + 2]), siz[i] = siz[i * 2 + 1] + siz[i * 2 + 2];
 		}
 
-		segtree_lazy(vector<segT> startarray, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT, ll)> _fbact, function<segF(segF, segF)> _fop)
+		segtree_lazy(vector<segT> startarray, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT)> _fbact, function<segF(segF, segF)> _fop)
 			:size(startarray.size()), dunit(_dunit), bop(_bop), funit(_funit), fbact(_fbact), fop(_fop), size2p(1), hig(0) {
 			while (size2p < size)size2p *= 2, hig++;
-			siz.resize(size2p * 2 - 1, 1);
 			data.resize(size2p * 2 - 1, dunit);
 			lazy.resize(size2p * 2 - 1, funit);
 			REP(i, startarray.size())data[i + size2p - 1] = startarray[i];
-			for (ll i = size2p - 2; 0 <= i; i--)
-				data[i] = bop(data[i * 2 + 1], data[i * 2 + 2]), siz[i] = siz[i * 2 + 1] + siz[i * 2 + 2];
+			for (ll i = size2p - 2; 0 <= i; i--)data[i] = bop(data[i * 2 + 1], data[i * 2 + 2]);
 		}
 
 		segT operator[](ll pos) {
@@ -214,7 +209,6 @@ namespace segtrees {
 
 	private:
 		ll size, size2p, hig;
-		vector<ll> siz;
 
 		segT dunit;
 		function<segT(segT, segT)> bop;
@@ -222,11 +216,11 @@ namespace segtrees {
 
 		segF funit;
 		vector<segF> lazy;
-		function<segT(segF, segT, ll)> fbact;
+		function<segT(segF, segT)> fbact;
 		function<segF(segF, segF)> fop;
 
 		void eval(ll k) {
-			data[k] = fbact(lazy[k], data[k], siz[k]);
+			data[k] = fbact(lazy[k], data[k]);
 			if (k < size2p - 1) {
 				lazy[k * 2 + 1] = fop(lazy[k], lazy[k * 2 + 1]);
 				lazy[k * 2 + 2] = fop(lazy[k], lazy[k * 2 + 2]);
