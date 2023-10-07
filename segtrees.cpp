@@ -254,4 +254,69 @@ namespace segtrees {
 		}
 	};
 
+	template<typename T>
+	class segtree_dynamic {
+	public:
+
+		segtree_dynamic(ll maxsize, T _dunit, function<T(T, T)> _bop) :dunit(_dunit), bop(_bop) {
+			ll sz = 1;
+			while (!(maxsize <= sz))sz <<= 1;
+			dat.push_back(node(dunit, 0, sz));
+		}
+
+		void update(ll pos, T _data) {
+			update_sub(pos, _data, 0);
+		}
+
+		T getr(ll l, ll rp) {
+			return getr_sub(l, rp, 0);
+		}
+
+	private:
+
+		void update_sub(ll pos, T _data, ll p) {
+			if (dat[p].rp - dat[p].l == 1) {
+				dat[p].dat = _data;
+			}
+			else {
+				ll m = (dat[p].l + dat[p].rp) / 2;
+				if (pos < m) {
+					if (dat[p].left_id == -1) {
+						dat[p].left_id = dat.size();
+						dat.push_back(node(dunit, dat[p].l, m));
+					}
+					update_sub(pos, _data, dat[p].left_id);
+					dat[p].dat = bop(dat[dat[p].left_id].dat, (dat[p].right_id != -1 ? dat[dat[p].right_id].dat : dunit));
+				}
+				else {
+					if (dat[p].right_id == -1) {
+						dat[p].right_id = dat.size();
+						dat.push_back(node(dunit, m, dat[p].rp));
+					}
+					update_sub(pos, _data, dat[p].right_id);
+					dat[p].dat = bop((dat[p].left_id != -1 ? dat[dat[p].left_id].dat : dunit), dat[dat[p].right_id].dat);
+				}
+			}
+			return;
+		}
+
+		T getr_sub(ll l, ll rp, ll p) {
+			if (dat[p].rp <= l || rp <= dat[p].l)return dunit;
+			else if (l <= dat[p].l && dat[p].rp <= rp)return dat[p].dat;
+			else {
+				ll m = (dat[p].l + dat[p].rp) / 2;
+				return bop(dat[p].left_id != -1 ? getr_sub(l, rp, dat[p].left_id) : dunit, dat[p].right_id != -1 ? getr_sub(l, rp, dat[p].right_id) : dunit);
+			}
+		}
+
+		struct node {
+			node(T _dat, ll _l, ll _rp) :dat(_dat), l(_l), rp(_rp), left_id(-1), right_id(-1) {};
+			T dat;
+			ll l, rp, left_id, right_id;
+		};
+
+		vector<node> dat;
+		T dunit;
+		function<T(T, T)> bop;
+	};
 }
