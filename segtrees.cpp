@@ -268,8 +268,24 @@ namespace segtrees {
 			update_sub(pos, _data, 0);
 		}
 
-		T getr(ll l, ll rp) {
+		T getr(ll l, ll rp)const {
 			return getr_sub(l, rp, 0);
+		}
+
+		T operator[](ll x)const {
+			ll p = 0;
+			while (!(dat[p].l == x && dat[p].rp == x + 1)) {
+				ll m = (dat[p].l + dat[p].rp) / 2;
+				if (x < m) {
+					if (dat[p].left_id == -1)return dunit;
+					else p = dat[p].left_id;
+				}
+				else {
+					if (dat[p].right_id == -1)return dunit;
+					else p = dat[p].right_id;
+				}
+			}
+			return dat[p].dat;
 		}
 
 	private:
@@ -300,7 +316,7 @@ namespace segtrees {
 			return;
 		}
 
-		T getr_sub(ll l, ll rp, ll p) {
+		T getr_sub(ll l, ll rp, ll p)const {
 			if (dat[p].rp <= l || rp <= dat[p].l)return dunit;
 			else if (l <= dat[p].l && dat[p].rp <= rp)return dat[p].dat;
 			else {
