@@ -57,6 +57,8 @@ namespace segtrees {
 			return res != -1 ? res : size;
 		}
 
+		ll getsize2p(void) { return size2p; };
+
 	private:
 
 		pair<ll, segT> lowerbound_sub(ll x, segT ltot, ll k, ll kl, ll krp) {
@@ -167,7 +169,7 @@ namespace segtrees {
 		segtree_lazy(ll _size, segT startdata, segT _dunit, function<segT(segT, segT)> _bop, segF _funit, function<segT(segF, segT)> _fbact, function<segF(segF, segF)> _fop)
 			:size(_size), dunit(_dunit), bop(_bop), funit(_funit), fbact(_fbact), fop(_fop), size2p(1), hig(0) {
 			while (size2p < size)size2p *= 2, hig++;
-			data.resize(size2p * 2 - 1, dunit);
+			data.resize(size2p * 2 - 1, startdata);
 			lazy.resize(size2p * 2 - 1, funit);
 			for (ll i = size2p - 2; 0 <= i; i--)data[i] = bop(data[i * 2 + 1], data[i * 2 + 2]);
 		}
@@ -206,6 +208,10 @@ namespace segtrees {
 
 		void updater(ll l, ll rp, segF f) {
 			updater_sub(l, rp, f, 0, 0, size2p);
+		}
+
+		void eval_all(void) {
+			REP(i, size2p * 2 - 1)eval(i);
 		}
 
 	private:
