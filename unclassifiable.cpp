@@ -67,9 +67,9 @@ int main() {
 	{
 		using DPTYPE = ll;
 		const DPTYPE dpunit = 0;
-		const function<DPTYPE(DPTYPE, DPTYPE)> bop = [](DPTYPE a, DPTYPE b)->DPTYPE {return 0; };
-		const function<DPTYPE(DPTYPE)> addroot = [](DPTYPE r)->DPTYPE {return 0; };
 		constexpr ll startroot = 0;
+		const function<DPTYPE(DPTYPE, DPTYPE)> bop = [](DPTYPE a, DPTYPE b)->DPTYPE {return a + b; };
+		const function<DPTYPE(DPTYPE, ll)> addroot = [](DPTYPE r, ll id)->DPTYPE {return r + 1; };
 
 		ll n;
 		cin >> n;
@@ -93,7 +93,7 @@ int main() {
 					}
 				}
 				return;
-			};
+				};
 			dfspar(startroot);
 		}
 
@@ -107,9 +107,9 @@ int main() {
 				REP(j, e[v].size())if (get<0>(e[v][j]) != par[v]) {
 					tans = bop(tans, dfs(get<0>(e[v][j]), j));
 				}
-				if (v != startroot)get<2>(e[par[v]][id]) = addroot(tans);
-				return addroot(tans);
-			};
+				if (v != startroot)get<2>(e[par[v]][id]) = addroot(tans, v);
+				return addroot(tans, v);
+				};
 			ans[startroot] = dfs(startroot, -1);
 			foldf[startroot].resize(e[startroot].size() + 1, dpunit);
 			foldb[startroot].resize(e[startroot].size() + 1, dpunit);
@@ -130,7 +130,7 @@ int main() {
 						DPTYPE tttans = dpunit;
 						tttans = bop(tttans, foldf[get<0>(e[v][j])][get<1>(e[v][j])]);
 						tttans = bop(tttans, foldb[get<0>(e[v][j])][get<1>(e[v][j]) + 1]);
-						get<2>(e[v][j]) = ttans = addroot(tttans);
+						get<2>(e[v][j]) = ttans = addroot(tttans, par[v]);
 					}
 					else {
 						ttans = get<2>(e[v][j]);
@@ -138,7 +138,7 @@ int main() {
 					}
 					tans = bop(tans, ttans);
 				}
-				ans[v] = addroot(tans);
+				ans[v] = addroot(tans, v);
 				foldf[v].resize(e[v].size() + 1, dpunit);
 				foldb[v].resize(e[v].size() + 1, dpunit);
 				REP(i, e[v].size())foldf[v][i + 1] = bop(foldf[v][i], get<2>(e[v][i]));

@@ -132,6 +132,8 @@ namespace kyopro_utility {
 
 		static mt19937_64& getengine(void) { return rnd; }
 
+		static void initengine(ull seed) { rnd = mt19937_64(seed); }
+
 	private:
 		static mt19937_64 rnd;
 	};
