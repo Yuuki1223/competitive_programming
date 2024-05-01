@@ -1,31 +1,32 @@
 #pragma once
 #include "templates/top.cpp"
+#include "templates/graph_base.cpp"
 
-vector<ll> shortest_path_unweighted(vector<vector<ll>> e, ll start) {
-	vector<ll> dis(e.size(), Llmax / 3);
+vector<ll> shortest_path_unweighted(directed_grqph g, ll start) {
+	vector<ll> dis(g.size(), Llmax / 3);
 	queue<ll> q;
 	dis[start] = 0;
 	q.push(start);
 	while (!q.empty()) {
 		ll v = q.front();
 		q.pop();
-		REP(j, e[v].size())if (chmin(dis[e[v][j]], dis[v] + 1))q.push(e[v][j]);
+		REP(j, g[v].size())if (chmin(dis[g[v][j].to], dis[v] + 1))q.push(g[v][j].to);
 	}
 	return dis;
 }
 
-vector<ll> shortest_path_positive_weighted(vector<vector<pair<ll, ll>>> e, ll start) {
-	vector<ll> dis(e.size(), Llmax / 3); // dis[i] == BEGINからの最小コスト
+vector<ll> shortest_path_positive_weighted(weighted_directed_graph g, ll start) {
+	vector<ll> dis(g.size(), Llmax / 3);
 	priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> pq; // (累計コスト,到達頂点)
 	dis[start] = 0;
 	pq.push(make_pair(0, start));
-
+	
 	while (!pq.empty()) {
 		ll v = pq.top().second, d = pq.top().first;
 		pq.pop();
 		if (dis[v] != d)continue;
-		REP(j, e[v].size()) {
-			if (chmin(dis[e[v][j].first], dis[v] + e[v][j].second))pq.push(make_pair(dis[e[v][j].first], e[v][j].first));
+		REP(j, g[v].size()) {
+			if (chmin(dis[g[v][j].to], dis[v] + g[v][j].weight))pq.push(make_pair(dis[g[v][j].to], g[v][j].to));
 		}
 	}
 	return dis;
