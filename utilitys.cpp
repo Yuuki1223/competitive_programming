@@ -130,6 +130,8 @@ namespace kyopro_utility {
 			return e;
 		}
 
+		static bool probability(double p) { return (p <= 0 ? false : (1 <= p ? true : (real_number<double>(0.0, 1.0) < p))); }
+
 		static mt19937_64& getengine(void) { return rnd; }
 
 		static void initengine(ull seed) { rnd = mt19937_64(seed); }
