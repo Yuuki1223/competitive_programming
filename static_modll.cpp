@@ -9,9 +9,9 @@ public:
 	constexpr static const ll MOD = _MOD;
 
 	modll_base() :var(0) {};
-	modll_base(const ll& x) { var = parup(x, MOD); };
+	modll_base(const ll& x) { var = pardown(x, MOD); };
 
-	modll_base pow(ll x)const { x = parup(x, MOD - 1); modll_base y(1), t(*this); while (0 < x) { if (x & 1) { y *= t; }t *= t; x >>= 1; }return y; } // 0^0 := 1
+	modll_base pow(ll x)const { x = pardown(x, MOD - 1); modll_base y(1), t(*this); while (0 < x) { if (x & 1) { y *= t; }t *= t; x >>= 1; }return y; } // 0^0 := 1
 	modll_base inv(void)const { if (!var) { cout << "Modll division by zero."; exit(-1); }return pow(MOD - 2); }
 
 	modll_base	operator+(const modll_base& x)const { modll_base y; y.var = (var + x.var < MOD ? var + x.var : var + x.var - MOD); return y; }
@@ -44,4 +44,4 @@ modll_base<_MOD> repcomb(const ll& n, const ll& r) { return comb<_MOD>(n + r - 1
 template<ll _MOD>
 ostream& operator<<(ostream& stream, const modll_base<_MOD>& x) { stream << x.var; return stream; }
 template<ll _MOD>
-istream& operator>>(istream& stream, modll_base<_MOD>& x) { ll t; stream >> t; x.var = parup(t, modll_base<_MOD>::MOD); return stream; }
+istream& operator>>(istream& stream, modll_base<_MOD>& x) { ll t; stream >> t; x.var = pardown(t, modll_base<_MOD>::MOD); return stream; }
